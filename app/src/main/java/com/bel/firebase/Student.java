@@ -11,6 +11,9 @@ public class Student {
         this.grade = grade;
     }
 
+    public Student() {
+    }
+
     public String getFname() {
         return fname;
     }
