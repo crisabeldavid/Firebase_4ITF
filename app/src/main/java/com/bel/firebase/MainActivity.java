@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         root.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot ss: dataSnapshot.getChildren()) {
+                for (DataSnapshot ss : dataSnapshot.getChildren()) {
                     keyList.add(ss.getKey());
                 }
             }
@@ -75,19 +75,18 @@ public class MainActivity extends AppCompatActivity {
         String fname = eFname.getText().toString().trim();
         String lname = eLname.getText().toString().trim();
         Long grade = Long.parseLong(eGrade.getText().toString().trim());
-        Student sgrade = new Student(fname,lname,grade);
+        Student sgrade = new Student(fname, lname, grade);
         String key = root.push().getKey();
         root.child(key).setValue(sgrade);
         keyList.add(key);
-        Toast.makeText(this,"record added to db",Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "record added to db", Toast.LENGTH_LONG).show();
     }
 
     public void movePrevious(View v) {
         if (index == 0) {
             index = 0;
             Toast.makeText(MainActivity.this, "first record", Toast.LENGTH_LONG).show();
-        }
-        else {
+        } else {
             index--;
         }
         root.addValueEventListener(new ValueEventListener() {
@@ -113,8 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 if (index == dataSnapshot.getChildrenCount() - 1) {
                     index = (int) dataSnapshot.getChildrenCount() - 1;
                     Toast.makeText(MainActivity.this, "last record", Toast.LENGTH_LONG).show();
-                }
-                else {
+                } else {
                     index++;
                 }
                 Student stud = dataSnapshot.child(keyList.get(index)).getValue(Student.class);
@@ -146,5 +144,27 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void editRecord(View v) {
+        String fname = eFname.getText().toString().trim();
+        String lname = eLname.getText().toString().trim();
+        Long grade = Long.parseLong(eGrade.getText().toString().trim());
+        Student sgrade = new Student(fname, lname, grade);
+        root.child(keyList.get(index)).setValue(sgrade);
+        Toast.makeText(this, "record updated", Toast.LENGTH_LONG).show();
+    }
+
+    public void deleteRecord(View v) {
+        try {
+            root.child(keyList.get(index)).removeValue();
+            eFname.setText("");
+            eLname.setText("");
+            eGrade.setText("");
+            Toast.makeText(this, "record deleted", Toast.LENGTH_LONG).show();
+
+        } catch (Exception e) {
+
+        }
     }
 }
